@@ -11,7 +11,6 @@ public class Node : MonoBehaviour
     // Once enemy arrive at end point, this function will attribute another destination for it.
     public void OnTriggerEnter(Collider other)
     {
-            Debug.Log(other.name);
         Enemy enemy = other.gameObject.GetComponent<Enemy>();
         if (enemy != null)
         {
@@ -26,7 +25,6 @@ public class Node : MonoBehaviour
         if (nextNodes.Count > 0)
         {
             int i = Random.Range(0, nextNodes.Count);
-            Debug.Log(nextNodes[i].name);
             return (nextNodes[i]);
         }
         return (null);

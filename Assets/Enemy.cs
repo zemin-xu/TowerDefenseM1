@@ -33,15 +33,4 @@ public class Enemy : MonoBehaviour
         }
     }
 
-/*
-    protected void FaceTarget(Vector3 destination)
-    {
-        Vector3 lookPos = destination - transform.position;
-        lookPos.y = 0;
-        Quaternion rotation = Quaternion.LookRotation(lookPos);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed);
-        Debug.Log(lookPos);
-    }
-    */
-
 }

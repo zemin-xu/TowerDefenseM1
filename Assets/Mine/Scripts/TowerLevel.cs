@@ -8,6 +8,13 @@ public class TowerLevel : MonoBehaviour
     public int cost;
     public int maxHealth;
     public int startingHealth;
-
+    [Multiline]
+    public string towerDescription;
     
+	private Transform parent;
+
+    private void Start()
+    {
+        parent = transform.parent;
+    }
 }

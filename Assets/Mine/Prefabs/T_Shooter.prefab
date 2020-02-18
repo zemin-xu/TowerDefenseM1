@@ -43,7 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74af76d56bedc41b69f10d4f177d3851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  configuration:
+    maxHealth: 20
+    startingHealth: 20
+    alignment:
+      unityObjectReference: {fileID: 11400000, guid: 7fe0cb8f095074349b9eb366ec6d5122,
+        type: 2}
+  targetTransform: {fileID: 0}
   levels:
   - {fileID: 2677495592591123819, guid: 706e16cb5e8ba426ba7a114a028f8afc, type: 3}
   towerName: Shooter
-  towerDescription: a simple shooter

@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 2361931566222833670}
   - component: {fileID: 6710845992643539181}
   - component: {fileID: 368871968338478811}
+  - component: {fileID: -735231914849665110}
   m_Layer: 0
-  m_Name: Octopus
+  m_Name: E_Octopus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,6 +71,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e60399630bfa408d805a0ef5ae529ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  configuration:
+    maxHealth: 20
+    startingHealth: 20
+    alignment:
+      unityObjectReference: {fileID: 11400000, guid: 6ab229e84b68c4dc1b1d4c8cfa678239,
+        type: 2}
+  targetTransform: {fileID: 0}
   start: {fileID: 0}
   rotationSpeed: 10
 --- !u!54 &6710845992643539181
@@ -102,6 +110,19 @@ CapsuleCollider:
   m_Height: 2.85
   m_Direction: 1
   m_Center: {x: 0, y: 1.4186609, z: 0}
+--- !u!114 &-735231914849665110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5622813809664797005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d007c1fe5e41c1888e4af3392f8676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialPoolCapacity: 10
 --- !u!1001 &5622813809179300168
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using ActionGameFramework.Health;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour
+public class Enemy : Targetable 
 {
     private NavMeshAgent agent;
     public Transform start;
@@ -17,8 +18,7 @@ public class Enemy : MonoBehaviour
     }
 
     private void Update() {
-
-        
+        Debug.Log(configuration.currentHealth);
     }
 
     public void SetNextNodeDestination(Node node)

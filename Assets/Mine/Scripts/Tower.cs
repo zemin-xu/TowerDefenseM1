@@ -4,21 +4,83 @@ using UnityEngine;
 using ActionGameFramework.Health;
 using Core.Utilities;
 
-public class Tower : MonoBehaviour
+public class Tower : Targetable
 {
     public TowerLevel[] levels;
 
     public string towerName;
 
+    public int currentLevel { get; protected set; }
+
+    public TowerLevel currTowerLevel { get; protected set; }
 
     public int purchaseCost
     {
         get { return levels[0].cost; }
     }
 
+    public bool isAtMaxLevel
+    {
+        get { return currentLevel == levels.Length - 1; }
+    }
+
     private void Start()
     {
-		Instantiate(levels[0].gameObject, transform);
+        SetLevel(0);
+    }
+
+    public int GetCostForNextLevel()
+    {
+        if (isAtMaxLevel)
+        {
+            return -1;
+        }
+        return levels[currentLevel + 1].cost;
+    }
+
+    public virtual bool UpgradeTower()
+    {
+        if (isAtMaxLevel)
+        {
+            return false;
+        }
+        SetLevel(currentLevel + 1);
+        return true;
+    }
+
+    protected void SetLevel(int level)
+    {
+        if (level < 0 || level >= levels.Length)
+        {
+            return;
+        }
+        currentLevel = level;
+        if (currTowerLevel != null)
+        {
+            Destroy(currTowerLevel.gameObject);
+        }
+
+        currTowerLevel = Instantiate(levels[currentLevel], transform);
+        currTowerLevel.Initialize(this);
+        ScaleHealth();
+    }
+
+    // If we upgrade a level, the health of it will be sacled upgrade.
+    // If it is initialised, it is at max health.
+    protected virtual void ScaleHealth()
+    {
+        // configuration : a Damagable object which deals with health.
+        configuration.SetMaxHealth(currTowerLevel.maxHealth);
+
+        if (currentLevel == 0)
+        {
+            configuration.SetHealth(currTowerLevel.maxHealth);
+        }
+        else
+        {
+            int currentHealth = Mathf.FloorToInt(configuration.normalisedHealth * currTowerLevel.maxHealth);
+            configuration.SetHealth(currentHealth);
+        }
     }
 
 }

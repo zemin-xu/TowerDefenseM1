@@ -11,10 +11,11 @@ public class TowerLevel : MonoBehaviour
     [Multiline]
     public string towerDescription;
     
-	private Transform parent;
+	private Tower parent;
 
-    private void Start()
+    public void Initialize(Tower tower)
     {
-        parent = transform.parent;
+        parent = tower;
+
     }
 }

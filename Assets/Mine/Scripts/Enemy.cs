@@ -18,7 +18,6 @@ public class Enemy : Targetable
     }
 
     private void Update() {
-        Debug.Log(configuration.currentHealth);
     }
 
     public void SetNextNodeDestination(Node node)

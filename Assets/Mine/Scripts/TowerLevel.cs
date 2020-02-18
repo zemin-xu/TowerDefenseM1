@@ -16,6 +16,5 @@ public class TowerLevel : MonoBehaviour
     public void Initialize(Tower tower)
     {
         parent = tower;
-
     }
 }

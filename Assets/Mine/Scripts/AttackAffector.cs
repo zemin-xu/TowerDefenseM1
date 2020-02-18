@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ActionGameFramework.Audio;
 using ActionGameFramework.Health;
 using Core.Health;
+using Core.Utilities;
 using UnityEngine;
 
     // The affector which will launch projectile and create damage to its enemies.
@@ -11,8 +12,7 @@ using UnityEngine;
 
 		public float fireRate = 1.0f;
         
-        // the projectile prefab.
-		public GameObject projectile;
+		public GameObject projectilePrefab;
 
         // the color of it effect range to be visualized in editor.
 		public Color affectorRangeColor = Color.yellow;
@@ -76,7 +76,8 @@ using UnityEngine;
 			{
 				return;
 			}
-
+			Projectile projectile = Poolable.TryGetPoolable<Projectile>(projectilePrefab);
+			projectile.Launch(center.position, trackingEnemy);
 /*
             // Shoot at all possible enemies.
 			if (isMultiAttack)

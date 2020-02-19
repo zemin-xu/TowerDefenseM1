@@ -5,5 +5,5 @@ using UnityEngine;
 public abstract class Affector: MonoBehaviour
 {
     // the alignment of this affector, which will be defined by its TowerLevel parent
-    public SerializableIAlignmentProvider alignment { get; protected set; }
+    public IAlignmentProvider alignment { get; protected set; }
 }

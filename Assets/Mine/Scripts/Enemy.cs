@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using ActionGameFramework.Health;
+using Core.Utilities;
+using Core.Health;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : Targetable 
@@ -15,6 +17,9 @@ public class Enemy : Targetable
     {
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(start.position);
+        
+        // Subscribe death event.
+        configuration.died += OnDied;
     }
 
     private void Update() {
@@ -30,6 +35,12 @@ public class Enemy : Targetable
         {
             // arrive at endPoint 
         }
+    }
+
+    private void OnDied(HealthChangeInfo healthChangeInfo)
+    {
+        configuration.died -= OnDied;
+        Poolable.TryPool(gameObject);
     }
 
 }

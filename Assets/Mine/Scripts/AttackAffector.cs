@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using ActionGameFramework.Audio;
 using ActionGameFramework.Health;
-using Core.Health;
 using Core.Utilities;
 using UnityEngine;
 
@@ -10,7 +8,7 @@ public class AttackAffector : Affector
 {
     public bool isMultiAttack;
 
-    public float fireRate = 1.0f;
+    public float fireRate = 1f;
 
     public GameObject projectilePrefab;
 
@@ -32,72 +30,50 @@ public class AttackAffector : Affector
     // current tracking enemy
     protected Targetable trackingEnemy;
 
-
-    void OnDestroy()
-    {
-    }
-
-    void OnLostTarget()
+    public void OnLostTarget()
     {
         trackingEnemy = null;
     }
 
-    void OnAcquiredTarget(Targetable acquiredTarget)
+    public void OnAcquiredTarget(Targetable acquiredTarget)
     {
         trackingEnemy = acquiredTarget;
     }
 
     protected virtual void Start()
     {
-		center = transform.parent;
-		alignment = transform.parent.parent.GetComponent<Tower>().configuration.alignment;
-		targetter = transform.parent.GetComponentInChildren<Targetter>();
+        center = transform.parent;
+        alignment = transform.parent.parent.GetComponent<Tower>().configuration.alignmentProvider;
+        targetter = transform.parent.GetComponentInChildren<Targetter>();
+        targetter.acquireTargetable += OnAcquiredTarget;
+        targetter.loseTargetable += OnLostTarget;
     }
 
     // Update the timers.
     // Launch projectile when time is up.
+    // bug here, will always trigger two times
     protected virtual void Update()
     {
         fireTimer -= Time.deltaTime;
-        if (trackingEnemy != null && fireTimer <= 0.0f)
+        if (trackingEnemy != null && fireTimer < 0.0f)
         {
-            FireProjectile();
             fireTimer = 1 / fireRate;
+            FireProjectile();
         }
     }
 
     protected virtual void FireProjectile()
     {
-        if (trackingEnemy == null)
+        // Shoot at all possible enemies.
+        if (isMultiAttack)
         {
-            return;
+            List<Targetable> targetables = targetter.GetAllTargets();
         }
-        Projectile projectile = Poolable.TryGetPoolable<Projectile>(projectilePrefab);
-        projectile.Launch(center.position, trackingEnemy);
-        /*
-                    // Shoot at all possible enemies.
-                    if (isMultiAttack)
-                    {
-                        List<Targetable> enemies = towerTargetter.GetAllTargets();
-                        m_Launcher.Launch(enemies, projectile, projectilePoints);
-                    }
-                    // Shoot at the close one and stick to it.
-                    else
-                    {
-                        m_Launcher.Launch(m_TrackingEnemy, damagerProjectile.gameObject, projectilePoints);
-                    }
-                */
-    }
-
-    /// <summary>
-    /// A delegate to compare distances of components
-    /// </summary>
-    /// <param name="first"></param>
-    /// <param name="second"></param>
-    protected virtual int ByDistance(Targetable first, Targetable second)
-    {
-        float firstSqrMagnitude = Vector3.SqrMagnitude(first.position - center.position);
-        float secondSqrMagnitude = Vector3.SqrMagnitude(second.position - center.position);
-        return firstSqrMagnitude.CompareTo(secondSqrMagnitude);
+        // Shoot at the cloiest one and stick to it.
+        else
+        {
+            Projectile projectile = Poolable.TryGetPoolable<Projectile>(projectilePrefab);
+            projectile.Launch(projectilePoints[0].position, trackingEnemy);
+        }
     }
 }

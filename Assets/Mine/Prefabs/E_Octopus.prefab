@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6710845992643539181}
   - component: {fileID: 368871968338478811}
   - component: {fileID: -735231914849665110}
+  - component: {fileID: 5360589262964570808}
   m_Layer: 0
   m_Name: E_Octopus
   m_TagString: Untagged
@@ -123,6 +124,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialPoolCapacity: 10
+--- !u!114 &5360589262964570808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5622813809664797005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abee75620e9f84f14a9452041dd7a6da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageableBehaviour: {fileID: 2361931566222833670}
+  deathParticleSystemPrefab: {fileID: 6568238065433552911, guid: f4c75ad596eea49fe8a70603636cf257,
+    type: 3}
+  deathEffectOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &5622813809179300168
 PrefabInstance:
   m_ObjectHideFlags: 0

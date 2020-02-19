@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6302441284844253369}
   - component: {fileID: 5440774384214542087}
   - component: {fileID: 2633448796948974217}
+  - component: {fileID: -5437436974734153799}
   m_Layer: 0
   m_Name: T_ProjectileShooter
   m_TagString: Untagged
@@ -139,3 +140,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 509fe2df0c1594ad0b653ef569940d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 20
+--- !u!114 &-5437436974734153799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6302441284844253374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dc2d0dc5e04c4f4486bcc6394a5e31e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 2
+  death:
+    m_PersistentCalls:
+      m_Calls: []

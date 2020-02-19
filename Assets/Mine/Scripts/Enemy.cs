@@ -14,6 +14,8 @@ public class Enemy : Targetable
     public float rotationSpeed = 10f;
 
     private void OnEnable() {
+        transform.position = start.position;
+        transform.rotation = Quaternion.identity;
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(start.position);
         // Subscribe death event.

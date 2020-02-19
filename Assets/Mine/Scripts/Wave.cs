@@ -11,6 +11,8 @@ public class Wave : TimedBehaviour
     // to be configurated in Editor
     public List<Enemy> enemiesToSpawn;
 
+    WaveManager waveManager;
+
     public Transform startingPoint;
 
     public float delayToNextSpawn = 1.0f;
@@ -20,15 +22,12 @@ public class Wave : TimedBehaviour
     // the RepeatingTimer used to spawn enemies
     protected RepeatingTimer spawnTimer;
 
-    private void Start() {
-        Init();
-    }
-
     public virtual float progress
     {
         get { return (float)(currentIndex) / enemiesToSpawn.Count; }
     }
 
+    // Start the spawning of this wave.
     public virtual void Init()
     {
         if (enemiesToSpawn.Count == 0)
@@ -37,6 +36,7 @@ public class Wave : TimedBehaviour
         }
         spawnTimer = new RepeatingTimer(delayToNextSpawn, SpawnCurrent);
         StartTimer(spawnTimer);
+        waveManager = FindObjectOfType<WaveManager>();
     }
 
     /// <summary>
@@ -49,7 +49,9 @@ public class Wave : TimedBehaviour
         {
             // this is required so wave progress is still accurate
             currentIndex = enemiesToSpawn.Count;
+            spawnTimer.SetTime(delayToNextSpawn);
             StopTimer(spawnTimer);
+            waveManager.TryNextWave();
         }
     }
 
@@ -61,7 +63,6 @@ public class Wave : TimedBehaviour
             Enemy enemy = enemiesToSpawn[currentIndex];
             spawnTimer.SetTime(delayToNextSpawn);
         }
-
         return hasNext;
     }
 
@@ -77,8 +78,5 @@ public class Wave : TimedBehaviour
         {
             return;
         }
-        var agentInstance = poolable.GetComponent<Enemy>();
-        agentInstance.transform.position = startingPoint.position;
-        agentInstance.transform.rotation = Quaternion.identity;
     }
 }

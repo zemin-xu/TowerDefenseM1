@@ -79,7 +79,7 @@ MonoBehaviour:
       unityObjectReference: {fileID: 11400000, guid: 6ab229e84b68c4dc1b1d4c8cfa678239,
         type: 2}
   targetTransform: {fileID: 0}
-  start: {fileID: 8514857721996538623, guid: d0a326d3a96894609b253b5b5da86180, type: 3}
+  start: {fileID: 3746298009546000595, guid: 7c39a12373f464ccabd56d965e5f72d5, type: 3}
   rotationSpeed: 10
 --- !u!54 &6710845992643539181
 Rigidbody:

@@ -13,16 +13,12 @@ public class Enemy : Targetable
     public Transform start;
     public float rotationSpeed = 10f;
 
-    private void Start()
-    {
+    private void OnEnable() {
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(start.position);
-        
         // Subscribe death event.
         configuration.died += OnDied;
-    }
-
-    private void Update() {
+        
     }
 
     public void SetNextNodeDestination(Node node)
@@ -42,5 +38,4 @@ public class Enemy : Targetable
         configuration.died -= OnDied;
         Poolable.TryPool(gameObject);
     }
-
 }

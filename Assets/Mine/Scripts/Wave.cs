@@ -11,6 +11,8 @@ public class Wave : TimedBehaviour
     // to be configurated in Editor
     public List<Enemy> enemiesToSpawn;
 
+
+
     WaveManager waveManager;
 
     public Transform startingPoint;
@@ -73,10 +75,6 @@ public class Wave : TimedBehaviour
         {
             return;
         }
-        var poolable = Poolable.TryGetPoolable<Poolable>(enemy.gameObject);
-        if (poolable == null)
-        {
-            return;
-        }
+        Poolable poolable = Poolable.TryGetPoolable<Poolable>(enemy.gameObject);
     }
 }

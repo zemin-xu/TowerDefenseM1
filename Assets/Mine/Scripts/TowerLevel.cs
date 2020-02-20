@@ -16,5 +16,7 @@ public class TowerLevel : MonoBehaviour
     public void Initialize(Tower tower)
     {
         parent = tower;
+        parent.configuration.maxHealth = maxHealth;
+        parent.configuration.startingHealth = startingHealth;
     }
 }

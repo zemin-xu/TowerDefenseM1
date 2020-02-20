@@ -1,5 +1,6 @@
 ﻿using ActionGameFramework.Health;
 using Core.Utilities;
+using Core.Health;
 using UnityEngine;
 
 [RequireComponent(typeof(Damager))]
@@ -23,6 +24,7 @@ public class Projectile : MonoBehaviour
         target = other;
         transform.position = ori;
         dir = Vector3.Normalize(target.transform.position - transform.position);
+        target.removed += OnTargetDied;
     }
 
     protected void DealDamage()
@@ -65,6 +67,12 @@ public class Projectile : MonoBehaviour
         }
         isEnabled = false;
         Poolable.TryPool(gameObject);
+    }
+
+    private void OnTargetDied(DamageableBehaviour targetable)
+    {
+        targetable.removed -= OnTargetDied;
+        target = null;
     }
 
 }

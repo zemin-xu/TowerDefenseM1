@@ -14,6 +14,8 @@ public class Tower : Targetable
 
     public TowerLevel currTowerLevel { get; protected set; }
 
+    public GameObject ghost;
+
     public int purchaseCost
     {
         get { return levels[0].cost; }
@@ -24,9 +26,18 @@ public class Tower : Targetable
         get { return currentLevel == levels.Length - 1; }
     }
 
-    private void Start()
+    public void OnConfirmedTower()
     {
         SetLevel(0);
+        if (ghost != null)
+        {
+            Destroy(ghost);
+        }
+    }
+
+    private void Update()
+     {
+        
     }
 
     public int GetCostForNextLevel()

@@ -23,11 +23,12 @@ public class Tower : Targetable
 
     public bool isAtMaxLevel
     {
-        get { return currentLevel == levels.Length - 1; }
+        get { return currentLevel == levels.Length - 1;}
     }
 
-    public void OnConfirmedTower()
+    public void OnConfirmedTower(Vector3 pos)
     {
+        transform.position = pos;
         SetLevel(0);
         if (ghost != null)
         {

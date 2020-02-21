@@ -6,78 +6,69 @@ public class Base : MonoBehaviour
 {
 
     private Vector3 towerPos;
-    private Color defaultColor;
-    private Light lighting;
 
-    [HideInInspector]
     public bool isOccupied;
 
-    public Color hoverColor;
+    public Material hoverMat;
+    private Material defaultMat;
 
-    private Transform platform;
     private Renderer rend;
+    private GameUI gameUI;
     // Start is called before the first frame update
 
     void Start()
     {
         towerPos = transform.GetChild(0).transform.position;
         rend = transform.GetChild(1).GetComponent<Renderer>();
-        defaultColor = rend.material.color;
-        lighting = transform.GetComponentInChildren<Light>();
+        defaultMat= rend.material;
         isOccupied = false;
+        gameUI = FindObjectOfType<GameUI>();
     }
 
     private void OnMouseEnter()
     {
-        if (!isOccupied)
+        if (gameUI.state == InteractiveState.Building)
         {
-            /*
-            if (GameUI.Instance.inputState == InputState.ChoosingBase)
+            if (!isOccupied)
             {
-                rend.material.color = hoverColor;
+                rend.material= hoverMat;
             }
-            */
         }
     }
 
     private void OnMouseDown()
     {
         Tower tower;
-        if ((tower = GameUI.instance.currentBuildingTower) == null)
+        if ((tower = gameUI.currentBuildingTower) == null)
         {
             Debug.LogWarning("You should choose the tower icon to indicate what to build.");
             return;
         }
-        TryInstantiateTower(tower.gameObject);
+        TryConfirmTower(tower);
+        
     }
 
     private void OnMouseExit()
     {
-        rend.material.color = defaultColor;
+        rend.material = defaultMat;
     }
 
-    public bool TryInstantiateTower(GameObject tower)
+    public bool TryConfirmTower(Tower tower)
     {
+        gameUI.OnBuildFinished();
         if (!isOccupied)
         {
-            /*
-            if (GameUI.instance.TryPurchaseTower(tower.GetComponent<Tower>()))
-            {
-                Instantiate(tower, towerPos, Quaternion.identity);
-                isOccupied = true;
-                OnBuildFinished();
-                lighting.transform.position = new Vector3(lighting.transform.position.x, lighting.transform.position.y + 10, lighting.transform.position.z);
-                return (true);
-            }
-            */
+            tower.OnConfirmedTower(towerPos);
+            isOccupied = true;
+            return (true);
         }
-        Debug.LogWarning("this place is occupied");
+        else
+        {
+            Debug.LogWarning("this place is occupied");
+        }
         return (false);
+
     }
 
-    private void OnBuildFinished()
-    {
-        //GameUI.Instance.inputState = InputState.Default;
-        //GameUI.instance.currTowerPrefab = null;
-    }
+ 
 }

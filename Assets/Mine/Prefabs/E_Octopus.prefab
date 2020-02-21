@@ -361,6 +361,11 @@ PrefabInstance:
       propertyPath: showWhenFull
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114531364466562666, guid: 905a77d94e3e246ae8dd84d4ad8474cb,
+        type: 3}
+      propertyPath: damageableBehaviour
+      value: 
+      objectReference: {fileID: 2361931566222833670}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 905a77d94e3e246ae8dd84d4ad8474cb, type: 3}
 --- !u!4 &5961521604616811764 stripped

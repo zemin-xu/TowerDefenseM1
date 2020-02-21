@@ -8,7 +8,8 @@ public enum InteractiveState { Default, Building, NonInteractive, GameFinished }
 public class GameUI : Singleton<GameUI>
 {
 
-    public InteractiveState state { get; private set; }
+    [HideInInspector]
+    public InteractiveState state;
 
     public bool isGameOver;
     public bool isGameWin;
@@ -69,9 +70,7 @@ public class GameUI : Singleton<GameUI>
                 if (Physics.Raycast(ray, out hit))
                 {
                     currentBuildingTower.transform.position = hit.point;
-                    Debug.Log(currentBuildingTower.transform.position);
                 }
-                Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
             }
         }
     }
@@ -117,7 +116,6 @@ public class GameUI : Singleton<GameUI>
     {
         Pause();
         optionUI.SetActive(true);
-
     }
 
     private void OnTowerPurchased(int money)
@@ -129,6 +127,13 @@ public class GameUI : Singleton<GameUI>
     private void OnLifeUpdated(int life)
     {
         lifeText.text = " " + life.ToString();
+    }
+
+    public void OnBuildFinished()
+    {
+        state = InteractiveState.Default;
+        currentBuildingTower = null;
+
     }
 
 

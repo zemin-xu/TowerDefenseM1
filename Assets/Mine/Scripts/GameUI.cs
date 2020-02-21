@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using Core.Utilities;
 
@@ -33,6 +32,7 @@ public class GameUI : Singleton<GameUI>
     public GameObject winUI;
     public GameObject gameoverUI;
     public GameObject optionUI;
+    public GameObject towerOptionUI;
     public GameObject towerInfoUI;
 
     [HideInInspector]
@@ -48,6 +48,7 @@ public class GameUI : Singleton<GameUI>
         gameoverUI.SetActive(false);
         winUI.SetActive(false);
         optionUI.SetActive(false);
+        towerOptionUI.SetActive(false);
         towerInfoUI.SetActive(false);
 
         // Subscribe event.
@@ -129,6 +130,7 @@ public class GameUI : Singleton<GameUI>
         if (currentBuildingTower != null)
             Destroy(currentBuildingTower.gameObject);
         OnBuildFinished();
+        towerInfoUI.SetActive(false);
     }
 
     private void OnMoneyUpdated()
@@ -155,10 +157,10 @@ public class GameUI : Singleton<GameUI>
         optionUI.SetActive(true);
     }
 
-    public void OnTowerButtonClicked()
+    public void OnTowerButtonClicked(Tower t)
     {
-        
         towerInfoUI.SetActive(true);
+        towerInfoUI.GetComponent<TowerInfoUI>().UpdateTowerInfo(t);
     }
 
  

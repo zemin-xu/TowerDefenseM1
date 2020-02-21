@@ -9,8 +9,9 @@ public class TowerButton : MonoBehaviour
     public Tower tower;
     public TMP_Text purchasePriceText;
 
-    public event Action towerButtonClick;
-    // Start is called before the first frame update
+    public event Action<Tower> towerButtonClick;
+
+
     void Start()
     {
         // Get the cost for the lv1 of this tower.
@@ -20,6 +21,8 @@ public class TowerButton : MonoBehaviour
         }
 
     }
+
+    // Action when clicking tower creating button.
     public void OnTowerButtonClick()
     {
         if (tower == null)
@@ -30,7 +33,10 @@ public class TowerButton : MonoBehaviour
         GameUI.instance.state = InteractiveState.Building;
 
         GameObject go = Instantiate(tower.gameObject);
-        GameUI.instance.currentBuildingTower = go.GetComponent<Tower>();
+        GameUI.instance.currentBuildingTower = tower;
+        GameUI.instance.OnTowerButtonClicked(tower);
     }
+
+
 
 }

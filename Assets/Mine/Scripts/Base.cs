@@ -5,7 +5,7 @@ using UnityEngine;
 public class Base : MonoBehaviour
 {
 
-    private Vector3 towerPos;
+    public Transform towerPoint;
 
     public bool isOccupied;
 
@@ -18,11 +18,10 @@ public class Base : MonoBehaviour
 
     void Start()
     {
-        towerPos = transform.GetChild(0).transform.position;
         rend = transform.GetChild(1).GetComponent<Renderer>();
         defaultMat= rend.material;
         isOccupied = false;
-        gameUI = FindObjectOfType<GameUI>();
+        gameUI = GameUI.instance; 
     }
 
     private void OnMouseEnter()
@@ -44,7 +43,7 @@ public class Base : MonoBehaviour
             Debug.LogWarning("You should choose the tower icon to indicate what to build.");
             return;
         }
-        TryConfirmTower(tower);
+        tower.TryConfirmPlacement(this);
         
     }
 
@@ -52,23 +51,5 @@ public class Base : MonoBehaviour
     {
         rend.material = defaultMat;
     }
-
-    public bool TryConfirmTower(Tower tower)
-    {
-        gameUI.OnBuildFinished();
-        if (!isOccupied)
-        {
-            tower.OnConfirmedTower(towerPos);
-            isOccupied = true;
-            return (true);
-        }
-        else
-        {
-            Debug.LogWarning("this place is occupied");
-        }
-        return (false);
-
-    }
-
  
 }

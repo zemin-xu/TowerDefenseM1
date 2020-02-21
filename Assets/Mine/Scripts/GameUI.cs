@@ -17,8 +17,11 @@ public class GameUI : Singleton<GameUI>
     public event Action gameover;
     public event Action gameWin;
 
+    private LevelManager levelManager;
+
     protected override void Awake()
     {
+        base.Awake();
         isGameOver = false;
         isGameWin = false;
     }
@@ -37,10 +40,21 @@ public class GameUI : Singleton<GameUI>
     private void Start()
     {
         state = InteractiveState.Default;
+        levelManager = LevelManager.instance;
 
+        // Activate UI.
         gameoverUI.SetActive(false);
         winUI.SetActive(false);
         optionUI.SetActive(false);
+
+        // Subscribe event.
+        levelManager.moneyUpdated += OnMoneyUpdated;
+        levelManager.lifeUpdated += OnLifeUpdated;
+
+        // Initialize text.
+        moneyText.text = levelManager.money + "";
+        lifeText.text = levelManager.life + "";
+        
     }
 
     private void Update()
@@ -62,8 +76,10 @@ public class GameUI : Singleton<GameUI>
         {
             if (currentBuildingTower != null)
             {
+                currentBuildingTower.placementSucceeded += OnBuildFinished;
+                currentBuildingTower.placementFailed += OnBuildFinished;
+                
                 currentBuildingTower.transform.position = Input.mousePosition;
-
                 Ray ray = Camera.main.ScreenPointToRay(new Vector3(
                     Input.mousePosition.x, Input.mousePosition.y, 10.0f));
                 RaycastHit hit;
@@ -87,19 +103,6 @@ public class GameUI : Singleton<GameUI>
         winUI.SetActive(true);
     }
 
-    public void OnTowerButtonClick(Tower tower)
-    {
-        if (tower == null)
-        {
-            Debug.LogWarning("tower prefab not existed");
-            return;
-        }
-        state = InteractiveState.Building;
-
-        GameObject go = Instantiate(tower.gameObject);
-        currentBuildingTower = go.GetComponent<Tower>();
-    }
-
     public void Pause()
     {
         state = InteractiveState.NonInteractive;
@@ -112,29 +115,44 @@ public class GameUI : Singleton<GameUI>
         Time.timeScale = 1;
     }
 
+     private void OnMoneyUpdated()
+    {
+        Debug.Log("ONMoneyChangeGAMEUI");
+        moneyText.text = levelManager.money.ToString();
+    }
+
+    // The life points to get off when get damaged.
+    private void OnLifeUpdated()
+    {
+        lifeText.text = " " + levelManager.life.ToString();
+    }
+
+    private void OnBuildFinished()
+    {
+        state = InteractiveState.Default;
+        currentBuildingTower = null;
+    }
+
+
+    // Functions parametered in Editor.
     public void OnOptionButtonClick()
     {
         Pause();
         optionUI.SetActive(true);
     }
 
-    private void OnTowerPurchased(int money)
+      public void OnTowerButtonClick(Tower tower)
     {
-        moneyText.text = " " + money.ToString();
+        if (tower == null)
+        {
+            Debug.LogWarning("tower prefab not existed");
+            return;
+        }
+        state = InteractiveState.Building;
+
+        GameObject go = Instantiate(tower.gameObject);
+        currentBuildingTower = go.GetComponent<Tower>();
     }
 
-    // The life points to get off when get damaged.
-    private void OnLifeUpdated(int life)
-    {
-        lifeText.text = " " + life.ToString();
-    }
-
-    public void OnBuildFinished()
-    {
-        state = InteractiveState.Default;
-        currentBuildingTower = null;
-
-    }
-
-
+   
 }

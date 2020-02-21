@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6068624ea278e406980676ac2b1e4f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerPoint: {fileID: 2606126529133139381}
   isOccupied: 0
   hoverMat: {fileID: 2100000, guid: 0df40a3dad5ae45edbde69bf9c6e3c56, type: 2}
 --- !u!136 &8840787315251593486

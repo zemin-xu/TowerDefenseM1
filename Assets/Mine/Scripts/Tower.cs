@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ActionGameFramework.Health;
@@ -16,6 +17,10 @@ public class Tower : Targetable
 
     public GameObject ghost;
 
+
+    public event Action placementFailed; 
+    public event Action placementSucceeded; 
+
     public int purchaseCost
     {
         get { return levels[0].cost; }
@@ -23,10 +28,10 @@ public class Tower : Targetable
 
     public bool isAtMaxLevel
     {
-        get { return currentLevel == levels.Length - 1;}
+        get { return currentLevel == levels.Length - 1; }
     }
 
-    public void OnConfirmedTower(Vector3 pos)
+    public void ConfirmPlacement(Vector3 pos)
     {
         transform.position = pos;
         SetLevel(0);
@@ -36,10 +41,35 @@ public class Tower : Targetable
         }
     }
 
-    private void Update()
-     {
-        
+    public void TryConfirmPlacement(Base baseModel)
+    {
+        if (!baseModel.isOccupied && TryPurchase())
+        {
+            ConfirmPlacement(baseModel.towerPoint.position);
+            baseModel.isOccupied = true;
+            if (placementSucceeded != null) 
+                placementSucceeded();
+        }
+        else
+        {
+            if (placementFailed != null)
+                placementFailed();
+            Debug.LogWarning("this place is occupied or you are lack of money.");
+            Destroy(gameObject);
+        }
     }
+
+    public bool TryPurchase()
+    {
+        if (LevelManager.instance.money - purchaseCost >= 0)
+        {
+            LevelManager.instance.UpdateMoney(-purchaseCost);
+            return (true);
+        }
+        return (false);
+    }
+
+
 
     public int GetCostForNextLevel()
     {

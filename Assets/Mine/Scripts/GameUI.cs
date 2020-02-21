@@ -54,21 +54,27 @@ public class GameUI : Singleton<GameUI>
         // Initialize text.
         moneyText.text = levelManager.money + "";
         lifeText.text = levelManager.life + "";
-        
+
     }
 
     private void Update()
     {
-        // Open or close option window.
+        // When player press down ESCAPE
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (state == InteractiveState.NonInteractive)
+            switch(state)
             {
+                case InteractiveState.NonInteractive:
                 ReturnGame();
-            }
-            else if (state == InteractiveState.Default)
-            {
+                break;
+
+                case InteractiveState.Default:
                 OnOptionButtonClick();
+                break;
+
+                case InteractiveState.Building:
+                CancelBuild();
+                break;
             }
         }
 
@@ -78,7 +84,7 @@ public class GameUI : Singleton<GameUI>
             {
                 currentBuildingTower.placementSucceeded += OnBuildFinished;
                 currentBuildingTower.placementFailed += OnBuildFinished;
-                
+
                 currentBuildingTower.transform.position = Input.mousePosition;
                 Ray ray = Camera.main.ScreenPointToRay(new Vector3(
                     Input.mousePosition.x, Input.mousePosition.y, 10.0f));
@@ -115,7 +121,14 @@ public class GameUI : Singleton<GameUI>
         Time.timeScale = 1;
     }
 
-     private void OnMoneyUpdated()
+    public void CancelBuild()
+    {
+        if (currentBuildingTower != null)
+            Destroy(currentBuildingTower.gameObject);
+        OnBuildFinished();
+    }
+
+    private void OnMoneyUpdated()
     {
         Debug.Log("ONMoneyChangeGAMEUI");
         moneyText.text = levelManager.money.ToString();
@@ -133,7 +146,6 @@ public class GameUI : Singleton<GameUI>
         currentBuildingTower = null;
     }
 
-
     // Functions parametered in Editor.
     public void OnOptionButtonClick()
     {
@@ -141,7 +153,7 @@ public class GameUI : Singleton<GameUI>
         optionUI.SetActive(true);
     }
 
-      public void OnTowerButtonClick(Tower tower)
+    public void OnTowerButtonClick(Tower tower)
     {
         if (tower == null)
         {
@@ -154,5 +166,5 @@ public class GameUI : Singleton<GameUI>
         currentBuildingTower = go.GetComponent<Tower>();
     }
 
-   
+
 }

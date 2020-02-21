@@ -11,6 +11,8 @@ public class Tower : Targetable
 
     public string towerName;
 
+    public int currentPrice {get; protected set; }
+
     public int currentLevel { get; protected set; }
 
     public TowerLevel currTowerLevel { get; protected set; }

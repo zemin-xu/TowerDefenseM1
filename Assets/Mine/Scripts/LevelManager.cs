@@ -11,7 +11,6 @@ public class LevelManager : Singleton<LevelManager>
     public int money;
     public int life;
 
-
     public event Action moneyUpdated;
     public event Action lifeUpdated;
 

@@ -33,8 +33,10 @@ public class GameUI : Singleton<GameUI>
     public GameObject winUI;
     public GameObject gameoverUI;
     public GameObject optionUI;
+    public GameObject towerInfoUI;
 
-    public Tower currentBuildingTower { get; private set; }
+    [HideInInspector]
+    public Tower currentBuildingTower;
 
 
     private void Start()
@@ -46,6 +48,7 @@ public class GameUI : Singleton<GameUI>
         gameoverUI.SetActive(false);
         winUI.SetActive(false);
         optionUI.SetActive(false);
+        towerInfoUI.SetActive(false);
 
         // Subscribe event.
         levelManager.moneyUpdated += OnMoneyUpdated;
@@ -130,7 +133,6 @@ public class GameUI : Singleton<GameUI>
 
     private void OnMoneyUpdated()
     {
-        Debug.Log("ONMoneyChangeGAMEUI");
         moneyText.text = levelManager.money.ToString();
     }
 
@@ -153,18 +155,12 @@ public class GameUI : Singleton<GameUI>
         optionUI.SetActive(true);
     }
 
-    public void OnTowerButtonClick(Tower tower)
+    public void OnTowerButtonClicked()
     {
-        if (tower == null)
-        {
-            Debug.LogWarning("tower prefab not existed");
-            return;
-        }
-        state = InteractiveState.Building;
-
-        GameObject go = Instantiate(tower.gameObject);
-        currentBuildingTower = go.GetComponent<Tower>();
+        
+        towerInfoUI.SetActive(true);
     }
 
+ 
 
 }

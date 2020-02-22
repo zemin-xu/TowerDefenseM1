@@ -10,10 +10,42 @@ public class TowerOptionUI : MonoBehaviour
     public TMP_Text upgradeCostText;
     public TMP_Text sellCostText;
 
-    public void UpdateTowerOption(Tower tower)
+    private Tower currentSelectingTower;
+    private Camera maincamera;
+
+  
+
+    private void OnEnable() {
+        maincamera = Camera.main;
+        GameUI.instance.selectedTower += OnSelectedTower;
+    }
+
+    private void OnDisable() {
+        GameUI.instance.selectedTower -= OnSelectedTower;
+        currentSelectingTower = null;
+    }
+
+    private void Update() {
+        AdjustPosition();
+    }
+
+    // Modify the position of UI based on tower's position.
+    private void AdjustPosition()
+    {
+        if (currentSelectingTower == null)
+        {
+            return ;
+        }
+        Vector3 point = maincamera.WorldToScreenPoint(currentSelectingTower.position);
+        point.z = 0;
+        transform.position = point;
+    }
+
+      public void UpdateTowerOption(Tower tower)
     {
         towerNameText.text = tower.towerName;
         towerDescriptionText.text = tower.levels[0].towerDescription;
+        currentSelectingTower = tower;
 
         int cost = tower.GetCostForNextLevel();
         if (cost != -1)
@@ -26,5 +58,11 @@ public class TowerOptionUI : MonoBehaviour
         }
         sellCostText.text ="Sell: " + (tower.currentPrice / 2).ToString();
     }
+
+    private void OnSelectedTower(Tower tower)
+    {
+        UpdateTowerOption(tower);
+    }
+
 
 }

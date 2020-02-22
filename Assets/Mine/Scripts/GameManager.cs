@@ -5,9 +5,4 @@ using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
-    private void Start() {
-
-        
-    }
-
 }

@@ -33,7 +33,7 @@ public class TowerButton : MonoBehaviour
         GameUI.instance.state = InteractiveState.Building;
 
         GameObject go = Instantiate(tower.gameObject);
-        GameUI.instance.currentBuildingTower = tower;
+        GameUI.instance.currentBuildingTower = go.GetComponent<Tower>();
         GameUI.instance.OnTowerButtonClicked(tower);
     }
 

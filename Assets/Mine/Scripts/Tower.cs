@@ -11,7 +11,7 @@ public class Tower : Targetable
 
     public string towerName;
 
-    public int currentPrice {get; protected set; }
+    public int currentPrice { get; protected set; }
 
     public int currentLevel { get; protected set; }
 
@@ -20,8 +20,9 @@ public class Tower : Targetable
     public GameObject ghost;
 
 
-    public event Action placementFailed; 
-    public event Action placementSucceeded; 
+
+    public event Action placementFailed;
+    public event Action placementSucceeded;
 
     public int purchaseCost
     {
@@ -39,7 +40,7 @@ public class Tower : Targetable
         SetLevel(0);
         if (ghost != null)
         {
-            Destroy(ghost);
+            ghost.SetActive(false);
         }
     }
 
@@ -49,13 +50,13 @@ public class Tower : Targetable
         {
             ConfirmPlacement(baseModel.towerPoint.position);
             baseModel.isOccupied = true;
-            if (placementSucceeded != null) 
-                placementSucceeded();
+            GameUI.instance.state = InteractiveState.Default;
+            GameUI.instance.currentBuildingTower = null;
         }
         else
         {
-            if (placementFailed != null)
-                placementFailed();
+            GameUI.instance.state = InteractiveState.Default;
+            GameUI.instance.currentBuildingTower = null;
             Debug.LogWarning("this place is occupied or you are lack of money.");
             Destroy(gameObject);
         }
@@ -98,13 +99,14 @@ public class Tower : Targetable
         {
             return;
         }
-        currentLevel = level;
         if (currTowerLevel != null)
         {
-            Destroy(currTowerLevel.gameObject);
+            currTowerLevel.gameObject.SetActive(false);
         }
+        currentLevel = level;
 
-        currTowerLevel = Instantiate(levels[currentLevel], transform);
+        levels[currentLevel].gameObject.SetActive(true);
+        currTowerLevel = levels[currentLevel];
         currTowerLevel.Initialize(this);
         ScaleHealth();
     }

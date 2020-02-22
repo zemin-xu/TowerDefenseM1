@@ -6,8 +6,8 @@ using Core.Utilities;
 public enum InteractiveState { Default, Building, NonInteractive, GameFinished };
 public class GameUI : Singleton<GameUI>
 {
+    private LevelManager levelManager;
 
-    [HideInInspector]
     public InteractiveState state;
 
     public bool isGameOver;
@@ -15,18 +15,10 @@ public class GameUI : Singleton<GameUI>
 
     public event Action gameover;
     public event Action gameWin;
-
-    private LevelManager levelManager;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        isGameOver = false;
-        isGameWin = false;
-    }
-
     public event Action towerPurchased;
     public event Action<int> homeDamaged;
+    public event Action<Tower> selectedTower;
+
     public TMP_Text moneyText;
     public TMP_Text lifeText;
     public GameObject winUI;
@@ -36,8 +28,14 @@ public class GameUI : Singleton<GameUI>
     public GameObject towerInfoUI;
 
     [HideInInspector]
-    public Tower currentBuildingTower;
+    public Tower currentBuildingTower; // the ghost chosen to be build
 
+    protected override void Awake()
+    {
+        base.Awake();
+        isGameOver = false;
+        isGameWin = false;
+    }
 
     private void Start()
     {
@@ -63,42 +61,83 @@ public class GameUI : Singleton<GameUI>
 
     private void Update()
     {
+        //DetectSelectingObject();
+
         // When player press down ESCAPE
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            switch(state)
+            switch (state)
             {
                 case InteractiveState.NonInteractive:
-                ReturnGame();
-                break;
+                    ReturnGame();
+                    break;
 
                 case InteractiveState.Default:
-                OnOptionButtonClick();
-                break;
+                    OnOptionButtonClick();
+                    break;
 
                 case InteractiveState.Building:
-                CancelBuild();
-                break;
+                    CancelBuild();
+                    break;
             }
         }
 
+        // When we have clicked tower button and is choosing its place.
         if (state == InteractiveState.Building)
         {
             if (currentBuildingTower != null)
             {
-                currentBuildingTower.placementSucceeded += OnBuildFinished;
-                currentBuildingTower.placementFailed += OnBuildFinished;
-
-                currentBuildingTower.transform.position = Input.mousePosition;
+                //currentBuildingTower.transform.position = Input.mousePosition;
                 Ray ray = Camera.main.ScreenPointToRay(new Vector3(
-                    Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                    Input.mousePosition.x, Input.mousePosition.y, 100.0f));
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    currentBuildingTower.transform.position = hit.point;
+                    Vector3 pos = hit.point;
+                    pos.y = hit.point.y + 2;
+                    currentBuildingTower.gameObject.transform.position = hit.point;
+                    currentBuildingTower.gameObject.transform.position = pos;
                 }
             }
         }
+    }
+
+
+    private void DetectSelectingObject()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Mouse is down");
+
+            RaycastHit hitInfo = new RaycastHit();
+            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+            if (hit)
+            {
+                Tower t;
+                if ((t = hitInfo.transform.GetComponent<Tower>()) != null)
+                {
+                    Debug.Log("Hit " + hitInfo.transform.gameObject.name);
+                    SelectTower(t);
+                    return;
+                }
+            }
+            DeselectTower();
+        }
+    }
+
+    private void SelectTower(Tower t)
+    {
+        towerOptionUI.SetActive(true);
+        if (selectedTower != null)
+        {
+            selectedTower(t);
+        }
+
+    }
+    
+    private void DeselectTower()
+    {
+        towerOptionUI.SetActive(false);
     }
 
     public void OnGameOver()
@@ -163,6 +202,6 @@ public class GameUI : Singleton<GameUI>
         towerInfoUI.GetComponent<TowerInfoUI>().UpdateTowerInfo(t);
     }
 
- 
+
 
 }

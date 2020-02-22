@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_RockFired
+  m_Shader: {fileID: -6465566751694194690, guid: ed32357f94863471c86d14716710227d,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_6A3EB261:
+        m_Texture: {fileID: 2800000, guid: ce20594406b434a7fbc3f96b16155593, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_3315E334: 6.73
+    - Vector1_4DFE7963: 4.49
+    - Vector1_8E98CFE: 0
+    - Vector1_AF1C3F78: 0
+    - Vector1_CFE3ECFD: 3
+    - Vector1_D7E586A1: 2.44
+    - Vector1_FC57AC00: 0.9
+    m_Colors:
+    - Color_1D217BDD: {r: 5.992157, g: 3.3568628, b: 0.5647059, a: 0}
+    - Color_8E104164: {r: 0.6886792, g: 0.6173392, b: 0.3475881, a: 0}
+    - Color_F38E369: {r: 0.1872549, g: 0.06568628, b: 0.03137255, a: 0}
+    - Vector2_46D1200C: {r: -0.1, g: 0.1, b: 0, a: 0}
+    - Vector2_4C414A6F: {r: 0.1, g: 0, b: 0, a: 0}

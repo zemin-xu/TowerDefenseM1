@@ -13,19 +13,23 @@ public class TowerOptionUI : MonoBehaviour
     private Tower currentSelectingTower;
     private Camera maincamera;
 
-  
 
-    private void OnEnable() {
+
+    private void OnEnable()
+    {
         maincamera = Camera.main;
-        GameUI.instance.selectedTower += OnSelectedTower;
+        if (GameUI.instance != null)
+            GameUI.instance.selectedTower += OnSelectedTower;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         GameUI.instance.selectedTower -= OnSelectedTower;
         currentSelectingTower = null;
     }
 
-    private void Update() {
+    private void Update()
+    {
         AdjustPosition();
     }
 
@@ -34,35 +38,51 @@ public class TowerOptionUI : MonoBehaviour
     {
         if (currentSelectingTower == null)
         {
-            return ;
+            return;
         }
         Vector3 point = maincamera.WorldToScreenPoint(currentSelectingTower.position);
         point.z = 0;
         transform.position = point;
     }
 
-      public void UpdateTowerOption(Tower tower)
+    public void UpdateTowerOption(Tower tower)
     {
-        towerNameText.text = tower.towerName;
-        towerDescriptionText.text = tower.levels[0].towerDescription;
-        currentSelectingTower = tower;
+        if (tower != null)
+        {
+            towerNameText.text = tower.towerName;
+            towerDescriptionText.text = tower.levels[tower.currentLevel].towerDescription;
+            currentSelectingTower = tower;
 
-        int cost = tower.GetCostForNextLevel();
-        if (cost != -1)
-        {
-            upgradeCostText.text = "Upgrade: " + cost.ToString();
+            int cost = tower.GetCostForNextLevel();
+            if (cost != -1)
+            {
+                upgradeCostText.text = cost.ToString();
+            }
+            else
+            {
+                upgradeCostText.text = "0";
+            }
+            sellCostText.text = (tower.currentPrice / 2).ToString();
         }
-        else
-        {
-            upgradeCostText.text = "0";
-        }
-        sellCostText.text ="Sell: " + (tower.currentPrice / 2).ToString();
+    }
+
+    public void OnClickSellButton()
+    {
+        Debug.Log("sell");
+        currentSelectingTower.SellTower();
+        gameObject.SetActive(false);
+
+    }
+
+    public void OnClickUpgradeButton()
+    {
+        Debug.Log("upgrade");
+        currentSelectingTower.UpgradeTower();
+        UpdateTowerOption(currentSelectingTower);
     }
 
     private void OnSelectedTower(Tower tower)
     {
         UpdateTowerOption(tower);
     }
-
-
 }

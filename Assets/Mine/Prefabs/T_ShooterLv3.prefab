@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 9118001900961525121}
   - component: {fileID: 2677495592591123819}
   m_Layer: 0
-  m_Name: T_ShooterLv2
+  m_Name: T_ShooterLv3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,10 +188,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e32361e90f4154118865a0f4039dbd0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 13
-  maxHealth: 15
-  startingHealth: 15
-  towerDescription: Lv1 shooter.
+  cost: 20
+  maxHealth: 50
+  startingHealth: 50
+  towerDescription: Lv3 shooter.
 --- !u!1001 &9118001900044719745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -258,12 +258,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 88fb26181d3454bb388bcc4f39f6b226, type: 2}
+      objectReference: {fileID: 2100000, guid: 2ed55eddf6f11417f8d4a259a84f93f7, type: 2}
     - target: {fileID: -1504981713932161579, guid: 5917fd18d3f424e3ebdd5b526094d5d2,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 88fb26181d3454bb388bcc4f39f6b226, type: 2}
+    - target: {fileID: -1504981713932161579, guid: 5917fd18d3f424e3ebdd5b526094d5d2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ed55eddf6f11417f8d4a259a84f93f7, type: 2}
     - target: {fileID: -927199367670048503, guid: 5917fd18d3f424e3ebdd5b526094d5d2,
         type: 3}
       propertyPath: m_Name
@@ -343,7 +348,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 88fb26181d3454bb388bcc4f39f6b226, type: 2}
+      objectReference: {fileID: 2100000, guid: 0635b254a5344459db7487442137f918, type: 2}
     - target: {fileID: -927199367670048503, guid: 2f85ddefa2d63400ca762f125773e1c4,
         type: 3}
       propertyPath: m_Name

@@ -9,6 +9,9 @@ public class Tower : Targetable
 {
     public TowerLevel[] levels;
 
+    [HideInInspector]
+    public bool hasBuilded;
+
     public string towerName;
 
     public int currentPrice { get; protected set; }
@@ -19,10 +22,9 @@ public class Tower : Targetable
 
     public GameObject ghost;
 
+    private Base currentBase;
 
-
-    public event Action placementFailed;
-    public event Action placementSucceeded;
+    public event Action placementFinished;
 
     public int purchaseCost
     {
@@ -50,17 +52,31 @@ public class Tower : Targetable
         {
             ConfirmPlacement(baseModel.towerPoint.position);
             baseModel.isOccupied = true;
-            GameUI.instance.state = InteractiveState.Default;
-            GameUI.instance.currentBuildingTower = null;
+            currentBase = baseModel;
+            OnBuildFinished();
         }
         else
         {
-            GameUI.instance.state = InteractiveState.Default;
-            GameUI.instance.currentBuildingTower = null;
+            OnBuildFinished();
             Debug.LogWarning("this place is occupied or you are lack of money.");
             Destroy(gameObject);
         }
-        GameUI.instance.towerInfoUI.SetActive(false);
+
+    }
+
+    private void OnBuildFinished()
+    {
+       GameUI.instance.state = InteractiveState.Default;
+            GameUI.instance.towerInfoUI.SetActive(false);
+            GameUI.instance.towerOptionUI.SetActive(false);
+            GameUI.instance.currentBuildingTower = null; 
+    }
+
+    public void SellTower()
+    {
+        LevelManager.instance.UpdateMoney(currentPrice / 2);
+        currentBase.isOccupied = false;
+        Destroy(gameObject);
     }
 
     public bool TryPurchase()
@@ -68,12 +84,11 @@ public class Tower : Targetable
         if (LevelManager.instance.money - purchaseCost >= 0)
         {
             LevelManager.instance.UpdateMoney(-purchaseCost);
+            currentPrice += purchaseCost;
             return (true);
         }
         return (false);
     }
-
-
 
     public int GetCostForNextLevel()
     {
@@ -90,8 +105,18 @@ public class Tower : Targetable
         {
             return false;
         }
-        SetLevel(currentLevel + 1);
-        return true;
+        if (LevelManager.instance.money - GetCostForNextLevel() >= 0)
+        {
+            SetLevel(currentLevel + 1);
+            LevelManager.instance.UpdateMoney(-currTowerLevel.cost);
+            currentPrice += currTowerLevel.cost;
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("Don't have enough money");
+            return false;
+        }
     }
 
     protected void SetLevel(int level)

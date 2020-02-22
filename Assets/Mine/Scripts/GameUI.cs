@@ -73,16 +73,16 @@ public class GameUI : Singleton<GameUI>
                     break;
 
                 case InteractiveState.Default:
-                {
-                    if (towerOptionUI.activeSelf)
                     {
-                        DeselectTower();
+                        if (towerOptionUI.activeSelf)
+                        {
+                            DeselectTower();
+                        }
+                        else
+                        {
+                            OnOptionButtonClick();
+                        }
                     }
-                    else
-                    {
-                        OnOptionButtonClick();
-                    }
-                }
                     break;
 
                 case InteractiveState.Building:
@@ -122,8 +122,7 @@ public class GameUI : Singleton<GameUI>
             bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
             if (hit && hitInfo.transform.parent && hitInfo.transform.parent.parent)
             {
-                Tower t = hitInfo.transform.parent.parent.GetComponent<Tower>(); 
-                Debug.Log("get");
+                Tower t = hitInfo.transform.parent.parent.GetComponent<Tower>();
                 SelectTower(t);
                 return;
             }
@@ -133,6 +132,11 @@ public class GameUI : Singleton<GameUI>
 
     private void SelectTower(Tower t)
     {
+        if (!t.hasBuilded)
+        {
+            t.hasBuilded = true;
+            return ;
+        }
         towerOptionUI.SetActive(true);
         if (selectedTower != null)
         {
@@ -191,8 +195,14 @@ public class GameUI : Singleton<GameUI>
 
     private void OnBuildFinished()
     {
-        state = InteractiveState.Default;
-        currentBuildingTower = null;
+        
+        if (currentBuildingTower != null)
+        {
+            state = InteractiveState.Default;
+            currentBuildingTower = null;
+            towerInfoUI.SetActive(false);
+            towerOptionUI.SetActive(false);
+        }
     }
 
     // Functions parametered in Editor.
@@ -207,6 +217,8 @@ public class GameUI : Singleton<GameUI>
         towerInfoUI.SetActive(true);
         towerInfoUI.GetComponent<TowerInfoUI>().UpdateTowerInfo(t);
     }
+
+
 
 
 

@@ -19,9 +19,9 @@ public class Base : MonoBehaviour
     void Start()
     {
         rend = transform.GetChild(1).GetComponent<Renderer>();
-        defaultMat= rend.material;
+        defaultMat = rend.material;
         isOccupied = false;
-        gameUI = GameUI.instance; 
+        gameUI = GameUI.instance;
     }
 
     private void OnMouseEnter()
@@ -30,26 +30,30 @@ public class Base : MonoBehaviour
         {
             if (!isOccupied)
             {
-                rend.material= hoverMat;
+                rend.material = hoverMat;
             }
         }
     }
 
     private void OnMouseDown()
     {
-        Tower tower;
-        if ((tower = gameUI.currentBuildingTower) == null)
+        if (gameUI.state == InteractiveState.Building)
         {
-            Debug.LogWarning("You should choose the tower icon to indicate what to build.");
-            return;
+            Tower tower;
+            if ((tower = gameUI.currentBuildingTower) == null)
+            {
+                Debug.LogWarning("You should choose the tower icon to indicate what to build.");
+                return;
+            }
+            tower.TryConfirmPlacement(this);
+
         }
-        tower.TryConfirmPlacement(this);
-        
+
     }
 
     private void OnMouseExit()
     {
         rend.material = defaultMat;
     }
- 
+
 }

@@ -100,26 +100,23 @@ public class GameUI : Singleton<GameUI>
                 }
             }
         }
+
+        DetectSelectingObject();
     }
 
 
     private void DetectSelectingObject()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && state == InteractiveState.Default)
         {
-            Debug.Log("Mouse is down");
-
             RaycastHit hitInfo = new RaycastHit();
             bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
-            if (hit)
+            if (hit && hitInfo.transform.parent && hitInfo.transform.parent.parent)
             {
-                Tower t;
-                if ((t = hitInfo.transform.GetComponent<Tower>()) != null)
-                {
-                    Debug.Log("Hit " + hitInfo.transform.gameObject.name);
-                    SelectTower(t);
-                    return;
-                }
+                Tower t = hitInfo.transform.parent.parent.GetComponent<Tower>(); 
+                Debug.Log("get");
+                SelectTower(t);
+                return;
             }
             DeselectTower();
         }
@@ -134,7 +131,7 @@ public class GameUI : Singleton<GameUI>
         }
 
     }
-    
+
     private void DeselectTower()
     {
         towerOptionUI.SetActive(false);

@@ -73,7 +73,16 @@ public class GameUI : Singleton<GameUI>
                     break;
 
                 case InteractiveState.Default:
-                    OnOptionButtonClick();
+                {
+                    if (towerOptionUI.activeSelf)
+                    {
+                        DeselectTower();
+                    }
+                    else
+                    {
+                        OnOptionButtonClick();
+                    }
+                }
                     break;
 
                 case InteractiveState.Building:
@@ -132,7 +141,7 @@ public class GameUI : Singleton<GameUI>
 
     }
 
-    private void DeselectTower()
+    public void DeselectTower()
     {
         towerOptionUI.SetActive(false);
     }

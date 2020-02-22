@@ -60,6 +60,7 @@ public class Tower : Targetable
             Debug.LogWarning("this place is occupied or you are lack of money.");
             Destroy(gameObject);
         }
+        GameUI.instance.towerInfoUI.SetActive(false);
     }
 
     public bool TryPurchase()

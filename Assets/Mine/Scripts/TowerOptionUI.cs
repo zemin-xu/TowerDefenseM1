@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+// TowerOption when clicking on a built tower.
 public class TowerOptionUI : MonoBehaviour
 {
     public TMP_Text towerNameText;
@@ -12,8 +13,6 @@ public class TowerOptionUI : MonoBehaviour
 
     private Tower currentSelectingTower;
     private Camera maincamera;
-
-
 
     private void OnEnable()
     {
@@ -45,6 +44,7 @@ public class TowerOptionUI : MonoBehaviour
         transform.position = point;
     }
 
+    // update tower sell price and upgrade price.
     public void UpdateTowerOption(Tower tower)
     {
         if (tower != null)
@@ -68,7 +68,6 @@ public class TowerOptionUI : MonoBehaviour
 
     public void OnClickSellButton()
     {
-        Debug.Log("sell");
         currentSelectingTower.SellTower();
         gameObject.SetActive(false);
 
@@ -76,7 +75,6 @@ public class TowerOptionUI : MonoBehaviour
 
     public void OnClickUpgradeButton()
     {
-        Debug.Log("upgrade");
         currentSelectingTower.UpgradeTower();
         UpdateTowerOption(currentSelectingTower);
     }

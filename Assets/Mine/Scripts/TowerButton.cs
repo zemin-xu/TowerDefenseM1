@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+// Attached to the tower creation button in order to specify which tower to create.
 public class TowerButton : MonoBehaviour
 {
     public Tower tower;
     public TMP_Text purchasePriceText;
-
-    public event Action<Tower> towerButtonClick;
-
 
     void Start()
     {

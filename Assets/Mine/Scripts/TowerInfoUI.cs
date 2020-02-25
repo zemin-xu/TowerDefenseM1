@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+// Displaying the selecting building tower info.
 public class TowerInfoUI : MonoBehaviour
 {
     public TMP_Text towerNameText;

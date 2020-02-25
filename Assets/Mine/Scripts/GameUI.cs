@@ -2,45 +2,54 @@ using System;
 using UnityEngine;
 using TMPro;
 using Core.Utilities;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
+// Several state of game.
+// Default: not choosing base to build tower.
+// Building : is choosing base to build tower.
+// NonInteractive : when in pause menu.
+// GameFinished : when game ends.
 public enum InteractiveState { Default, Building, NonInteractive, GameFinished };
 public class GameUI : Singleton<GameUI>
 {
     private LevelManager levelManager;
-
+    private WaveManager waveManager;
     public InteractiveState state;
 
-    public bool isGameOver;
-    public bool isGameWin;
-
-    public event Action gameover;
-    public event Action gameWin;
-    public event Action towerPurchased;
-    public event Action<int> homeDamaged;
+    // When a builded tower is selected.
     public event Action<Tower> selectedTower;
 
     public TMP_Text moneyText;
     public TMP_Text lifeText;
+
+    public TMP_Text progressText;
     public GameObject winUI;
     public GameObject gameoverUI;
     public GameObject optionUI;
     public GameObject towerOptionUI;
     public GameObject towerInfoUI;
 
+    public GameObject waveProgressUI;
+    // The slider of wave progress.
+    public Slider slider; 
+
     [HideInInspector]
-    public Tower currentBuildingTower; // the ghost chosen to be build
+    public Tower currentBuildingTower; // the ghost tower chosen to be build
+
+    // When the start wave event is triggered.
+    public event Action startWaveActivated;
 
     protected override void Awake()
     {
         base.Awake();
-        isGameOver = false;
-        isGameWin = false;
     }
 
     private void Start()
     {
         state = InteractiveState.Default;
         levelManager = LevelManager.instance;
+        waveManager = WaveManager.instance;
 
         // Activate UI.
         gameoverUI.SetActive(false);
@@ -48,12 +57,16 @@ public class GameUI : Singleton<GameUI>
         optionUI.SetActive(false);
         towerOptionUI.SetActive(false);
         towerInfoUI.SetActive(false);
+        waveProgressUI.SetActive(false);
 
         // Subscribe event.
         levelManager.moneyUpdated += OnMoneyUpdated;
         levelManager.lifeUpdated += OnLifeUpdated;
 
-        // Initialize text.
+        levelManager.gameWin += OnGameWin;
+        levelManager.gameover += OnGameOver;
+
+        // Initialize info text.
         moneyText.text = levelManager.money + "";
         lifeText.text = levelManager.life + "";
 
@@ -61,26 +74,34 @@ public class GameUI : Singleton<GameUI>
 
     private void Update()
     {
-        //DetectSelectingObject();
-
         // When player press down ESCAPE
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.I))
         {
             switch (state)
             {
+                // in Pause
                 case InteractiveState.NonInteractive:
                     ReturnGame();
                     break;
 
+                
                 case InteractiveState.Default:
                     {
+                        // if the option ui is displayed.
                         if (towerOptionUI.activeSelf)
                         {
                             DeselectTower();
                         }
                         else
                         {
-                            OnOptionButtonClick();
+                            if (optionUI.activeSelf)
+                            {
+                                ReturnGame();
+                            }
+                            else
+                            {
+                                OnOptionButtonClick();
+                            }
                         }
                     }
                     break;
@@ -96,7 +117,7 @@ public class GameUI : Singleton<GameUI>
         {
             if (currentBuildingTower != null)
             {
-                //currentBuildingTower.transform.position = Input.mousePosition;
+                // display the ghost a bit higher above the mouse position.
                 Ray ray = Camera.main.ScreenPointToRay(new Vector3(
                     Input.mousePosition.x, Input.mousePosition.y, 100.0f));
                 RaycastHit hit;
@@ -110,10 +131,18 @@ public class GameUI : Singleton<GameUI>
             }
         }
 
+        // update slider info.
+        if (slider != null)
+        {
+            slider.value = waveManager.waveProgress; 
+            progressText.text = "WAVE " + (waveManager.waveNumber - 1 ) + " / " + waveManager.totalWaves;
+        }
+
         DetectSelectingObject();
     }
 
 
+    // detecting if player is clicking mouse to choose tower or deselect tower.
     private void DetectSelectingObject()
     {
         if (Input.GetMouseButtonDown(0) && state == InteractiveState.Default)
@@ -130,19 +159,22 @@ public class GameUI : Singleton<GameUI>
         }
     }
 
+    // if select an existing tower, an tower option ui will be displayed.
     private void SelectTower(Tower t)
     {
-        if (!t.hasBuilded)
+        if (t != null)
         {
-            t.hasBuilded = true;
-            return ;
+            if (!t.hasBuilded)
+            {
+                t.hasBuilded = true;
+                return;
+            }
+            towerOptionUI.SetActive(true);
+            if (selectedTower != null)
+            {
+                selectedTower(t);
+            }
         }
-        towerOptionUI.SetActive(true);
-        if (selectedTower != null)
-        {
-            selectedTower(t);
-        }
-
     }
 
     public void DeselectTower()
@@ -171,9 +203,19 @@ public class GameUI : Singleton<GameUI>
     public void ReturnGame()
     {
         state = InteractiveState.Default;
+        if (optionUI.activeSelf)
+        {
+            optionUI.SetActive(false);
+        }
         Time.timeScale = 1;
     }
+    
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 
+    // cancel building current selecting tower.
     public void CancelBuild()
     {
         if (currentBuildingTower != null)
@@ -195,7 +237,7 @@ public class GameUI : Singleton<GameUI>
 
     private void OnBuildFinished()
     {
-        
+
         if (currentBuildingTower != null)
         {
             state = InteractiveState.Default;
@@ -205,11 +247,27 @@ public class GameUI : Singleton<GameUI>
         }
     }
 
-    // Functions parametered in Editor.
+    /* The following Functions will be parametered in Editor. */
     public void OnOptionButtonClick()
     {
-        Pause();
-        optionUI.SetActive(true);
+        if (optionUI.activeSelf)
+        {
+            ReturnGame();
+        }
+        else
+        {
+            Pause();
+            optionUI.SetActive(true);
+        }
+    }
+
+    public void OnActivateStartWaveButtonPressed()
+    {
+        if (startWaveActivated != null)
+        {
+            startWaveActivated();
+        }
+        waveProgressUI.SetActive(true);
     }
 
     public void OnTowerButtonClicked(Tower t)
@@ -218,8 +276,15 @@ public class GameUI : Singleton<GameUI>
         towerInfoUI.GetComponent<TowerInfoUI>().UpdateTowerInfo(t);
     }
 
+    public void ReloadCurrentScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1;
+    }
 
-
-
-
+    // For debug use.
+   public void AddMoney()
+    {
+       levelManager.UpdateMoney(100);
+    }
 }

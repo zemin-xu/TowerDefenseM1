@@ -24,5 +24,5 @@ Material:
     - Vector1_2DBABCB: 1
     - Vector1_B33C88A7: 0.9
     m_Colors:
-    - Color_791BB3FF: {r: 0.07289068, g: 0.36205247, b: 1.7169812, a: 0}
+    - Color_791BB3FF: {r: 0, g: 0.31178766, b: 1.7732923, a: 0}
     - Vector2_45AC64E: {r: 0.75, g: 0.75, b: 0, a: 0}

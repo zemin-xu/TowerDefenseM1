@@ -4,6 +4,7 @@ using ActionGameFramework.Health;
 using Core.Health;
 using UnityEngine;
 
+// Targetter is in charge of finding enemy in its range.
 public class Targetter : MonoBehaviour
 {
     public Transform turret;
@@ -29,6 +30,7 @@ public class Targetter : MonoBehaviour
     // the alignment of affector attached
     public IAlignmentProvider alignment;
 
+// When it detects enemies in its range.
 	public event Action<Targetable> acquireTargetable;
 	public event Action loseTargetable;
 
@@ -44,10 +46,7 @@ public class Targetter : MonoBehaviour
         }
     }
 
-    public Targetable GetCurrentTarget()
-    {
-        return currentTargetable;
-    }
+    // If there are several enemies, it will return the list of enemies for other class.
 
     public List<Targetable> GetAllTargets()
     {
@@ -57,6 +56,7 @@ public class Targetter : MonoBehaviour
     protected virtual void Start()
     {
         targetsInRange = new List<Targetable>();
+        attachedCollider = GetComponent<SphereCollider>();
         targetsInRange.Clear();
         alignment = transform.parent.parent.GetComponent<Tower>().configuration.alignmentProvider;
         // Reset turret facing.
@@ -66,6 +66,7 @@ public class Targetter : MonoBehaviour
         }
     }
 
+// update search time, when ok, it start searching and rotate turret.
     protected virtual void Update()
     {
         searchTimer -= Time.deltaTime;
@@ -137,7 +138,6 @@ public class Targetter : MonoBehaviour
         {
             return null;
         }
-
         Targetable nearest = null;
         float distance = float.MaxValue;
         for (int i = length - 1; i >= 0; i--)

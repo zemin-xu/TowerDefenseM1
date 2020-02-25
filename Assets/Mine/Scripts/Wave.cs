@@ -5,19 +5,18 @@ using Core.Utilities;
 using UnityEngine;
 
 // The class of a single wave.
+// This class is much inspired by the Tower Defense Template implementation.
+// Some code is still not understandable.
 public class Wave : TimedBehaviour
 {
     // the enemies prefab to spawn
     // to be configurated in Editor
     public List<Enemy> enemiesToSpawn;
-
-
-
     WaveManager waveManager;
 
     public Transform startingPoint;
 
-    public float delayToNextSpawn = 1.0f;
+    public float delayToNextSpawn = 2.0f;
 
     protected int currentIndex;
 
@@ -30,26 +29,24 @@ public class Wave : TimedBehaviour
     }
 
     // Start the spawning of this wave.
-    public virtual void Init()
+    public virtual int Init()
     {
         if (enemiesToSpawn.Count == 0)
         {
-            return;
+            return 0;
         }
         spawnTimer = new RepeatingTimer(delayToNextSpawn, SpawnCurrent);
         StartTimer(spawnTimer);
         waveManager = FindObjectOfType<WaveManager>();
+        return (enemiesToSpawn.Count);
     }
 
-    /// <summary>
-    /// Handles spawning the current agent and sets up the next agent for spawning
-    /// </summary>
+    // Handles spawning the current agent and sets up the next agent for spawning
     protected virtual void SpawnCurrent()
     {
         SpawnAgent();
         if (!TryNextSpawn())
         {
-            // this is required so wave progress is still accurate
             currentIndex = enemiesToSpawn.Count;
             spawnTimer.SetTime(delayToNextSpawn);
             StopTimer(spawnTimer);

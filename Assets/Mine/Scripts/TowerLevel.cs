@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Core.Health;
 using UnityEngine;
 
+// Attached to a single level tower to give info.
 [DisallowMultipleComponent]
 public class TowerLevel : MonoBehaviour
 {

@@ -5,6 +5,7 @@ using UnityEngine;
 using ActionGameFramework.Health;
 using Core.Utilities;
 
+// Tower class controls the life and some basic info of a tower.
 public class Tower : Targetable
 {
     public TowerLevel[] levels;
@@ -22,9 +23,9 @@ public class Tower : Targetable
 
     public GameObject ghost;
 
-    private Base currentBase;
+    // the base that it occupies.
 
-    public event Action placementFinished;
+    private Base currentBase;
 
     public int purchaseCost
     {
@@ -46,6 +47,7 @@ public class Tower : Targetable
         }
     }
 
+// Try confirm placement is necessary in case that the fact of lacking money will stop it.
     public void TryConfirmPlacement(Base baseModel)
     {
         if (!baseModel.isOccupied && TryPurchase())
@@ -154,5 +156,4 @@ public class Tower : Targetable
             configuration.SetHealth(currentHealth);
         }
     }
-
 }

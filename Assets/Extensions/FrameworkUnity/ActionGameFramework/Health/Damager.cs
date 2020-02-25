@@ -75,7 +75,7 @@ namespace ActionGameFramework.Health
 		/// <summary>
 		/// Instantiate particle system and play it
 		/// </summary>
-		void OnCollisionEnter(Collision other)
+		protected virtual void OnCollisionEnter(Collision other)
 		{
 			if (collisionParticles == null || Random.value > chanceToSpawnCollisionPrefab)
 			{

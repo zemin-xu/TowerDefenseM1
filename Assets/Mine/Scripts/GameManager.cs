@@ -5,4 +5,8 @@ using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
+    // In order to make music fluent between menu and main scene.
+    private void Awake() {
+        DontDestroyOnLoad(this.gameObject);
+    }
 }

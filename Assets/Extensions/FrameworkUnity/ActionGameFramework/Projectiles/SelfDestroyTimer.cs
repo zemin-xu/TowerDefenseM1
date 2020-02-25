@@ -57,7 +57,8 @@ namespace ActionGameFramework.Projectiles
 		protected virtual void OnTimeEnd()
 		{
 			death.Invoke();
-			Poolable.TryPool(gameObject);
+			//Poolable.TryPool(gameObject);
+			Destroy(gameObject);
 			timer.Reset();
 		}
 	}

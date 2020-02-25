@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Mine/Scenes/Menu.unity
+    guid: da399f4f3ae8f85479136a1e2cc5fc89
+  - enabled: 1
     path: Assets/Mine/Scenes/Main.unity
     guid: 787088e2777d743c98c352d4c7a6b8db
   m_configObjects: {}

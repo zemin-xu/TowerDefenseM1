@@ -9,7 +9,6 @@ public class AttackAffector : Affector
     public bool isMultiAttack;
 
     public float fireRate = 1f;
-
     public GameObject projectilePrefab;
 
     // the color of it effect range to be visualized in editor.
@@ -30,11 +29,13 @@ public class AttackAffector : Affector
     // current tracking enemy
     protected Targetable trackingEnemy;
 
+    // When lost enemy.
     public void OnLostTarget()
     {
         trackingEnemy = null;
     }
 
+    // When the targetter get the enemy.
     public void OnAcquiredTarget(Targetable acquiredTarget)
     {
         trackingEnemy = acquiredTarget;
@@ -67,12 +68,24 @@ public class AttackAffector : Affector
         // Shoot at all possible enemies.
         if (isMultiAttack)
         {
+            int i = 0;
             List<Targetable> targetables = targetter.GetAllTargets();
+            foreach(Targetable t in targetables)
+            {
+                if (t != null)
+                {
+                    Projectile projectile = Poolable.TryGetPoolable<Projectile>(projectilePrefab);
+                    projectile.Launch(projectilePoints[i].position, t);
+                }
+                i++;
+                 
+            }
         }
         // Shoot at the cloiest one and stick to it.
         else
         {
             Projectile projectile = Poolable.TryGetPoolable<Projectile>(projectilePrefab);
+          
             projectile.Launch(projectilePoints[0].position, trackingEnemy);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+// The several nodes enemies will follow, when enter into a node, it will guide enemy to next one.
 [RequireComponent(typeof(Collider))]
 public class Node : MonoBehaviour
 {
